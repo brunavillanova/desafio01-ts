@@ -1,42 +1,48 @@
 export abstract class DioAccount {
-  private name: string
-  private readonly accountNumber: number
-  balance: number = 0
-  private status: boolean = true
+  private name: string;
+  private readonly accountNumber: number;
+  protected balance: number = 0;
+  private status: boolean = true;
 
-  constructor(name: string, accountNumber: number){
-    this.name = name
-    this.accountNumber = accountNumber
+  constructor(name: string, accountNumber: number) {
+    this.name = name;
+    this.accountNumber = accountNumber;
   }
 
-  setName = (name: string): void => {
-    this.name = name
-    console.log('Nome alterado com sucesso!')
+  public getName(): string {
+    return this.name;
   }
 
-  getName = (): string => {
-    return this.name
-  }
-
-  deposit = (): void => {
-    if(this.validateStatus()){
-      console.log('Voce depositou')
+  public deposit(amount: number): void {
+    if (this.validateStatus() && amount > 0) {
+      this.balance += amount;
+      console.log(`Você depositou R$${amount}. Novo saldo: R$${this.balance}.`);
+    } else if (amount <= 0) {
+      console.log('O valor do depósito deve ser maior que zero.');
     }
   }
 
-  withdraw = (): void => {
-    console.log('Voce sacou')
+  public withdraw(amount: number): void {
+    if (this.validateStatus()) {
+      if (this.balance >= amount && amount > 0) {
+        this.balance -= amount;
+        console.log(`Você sacou R$${amount}. Novo saldo: R$${this.balance}.`);
+      } else if (amount <= 0) {
+        console.log('O valor do saque deve ser maior que zero.');
+      } else {
+        console.log('Saldo insuficiente para realizar o saque.');
+      }
+    }
   }
 
-  getBalance = (): void => {
-    console.log(this.balance)
+  public getBalance(): number {
+    return this.balance;
   }
 
-  private validateStatus = (): boolean => {
+  protected validateStatus(): boolean {
     if (this.status) {
-      return this.status
+      return this.status;
     }
-
-    throw new Error('Conta inválida')
+    throw new Error('Conta inválida');
   }
 }
