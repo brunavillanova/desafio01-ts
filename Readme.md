@@ -1,38 +1,94 @@
-# Desenvolvendo o Dio Bank
-desenvolvido por [Nathally Souza](https://github.com/nathyts)
+Documentação do Projeto
+Visão Geral
 
-#### Projeto desenvolvido com conceitos básicos de typescript
+Este projeto é um sistema de contas bancárias implementado em TypeScript. O sistema inclui várias classes que representam diferentes tipos de contas e operações bancárias básicas, como depósitos, saques e empréstimos.
+Classes e Métodos
+1. DioAccount
 
-### Tecnologias
-- Typescript
+A classe base DioAccount representa uma conta bancária genérica. Contém métodos para gerenciar saldo e status da conta.
+Propriedades
 
-### Como rodar o projeto
+    private name: string: Nome do titular da conta.
+    private readonly accountNumber: number: Número da conta, não pode ser alterado.
+    protected balance: number: Saldo da conta.
+    private status: boolean: Status da conta (ativa ou inativa).
 
-1 - Clone o repositório
+Métodos
 
-2 - Instale as dependeências
-    
-    npm install
+    constructor(name: string, accountNumber: number): Inicializa uma nova instância com nome e número da conta.
+    public getName(): string: Retorna o nome do titular da conta.
+    public deposit(amount: number): void: Adiciona um valor ao saldo, se a conta estiver ativa e o valor for positivo.
+    public withdraw(amount: number): void: Subtrai um valor do saldo, se a conta estiver ativa, o valor for positivo e o saldo for suficiente.
+    public getBalance(): number: Retorna o saldo atual da conta.
+    protected validateStatus(): boolean: Valida se a conta está ativa.
 
-3 - Execute o projeto
+2. PeopleAccount
 
-    npm run dev
+A classe PeopleAccount é uma extensão de DioAccount para contas pessoais.
+Propriedades
 
-#### Desafios
-[ ] Implementar os métodos de depósito (deposit) e saque (withdraw) na classe DioAccount
-  - Os valores dos saldos devem ser alterados, de acordo com o valor informado para depósito
-  - Apenas contas com o status true e saldo (balance) maior que o valor solicitado podem fazer saques
+    doc_id: number: Identificador do documento do titular.
 
-[ ] Implementar o método de empréstimo (getLoan) na classe CompanyAccount
-  - Os valores do saldos deve ser acrescidos, de acordo com o valor informado para empréstimo
-  - Apenas contas com o status true podem fazer empréstimo
+Métodos
 
-[ ] Criar um novo tipo de conta a partir da DioAccount
-  - Esta conta não deve receber novos atributos
-  - Esta conta terá um método de depósito, que acresce 10 a mais ao valor informado para depósito. (Ex: Um depósito de 100, será de 110 no final)
+    constructor(doc_id: number, name: string, accountNumber: number): Inicializa uma nova instância com identificador do documento, nome e número da conta.
 
-[ ] Todos os atributos de qualquer conta devem ser privados
+3. CompanyAccount
 
-[ ] Os atributos name e accountNumber não podem ser alterados internamente ou externamente
+A classe CompanyAccount é uma extensão de DioAccount para contas de empresas. Adiciona funcionalidade para empréstimos.
+Métodos
 
-[ ] Criar instancias para cada um dos tipos de conta no app.ts e executar os métodos possíveis.
+    constructor(name: string, accountNumber: number): Inicializa uma nova instância com nome e número da conta.
+    public getLoan(amount: number): void: Adiciona um valor ao saldo como um empréstimo, se a conta estiver ativa.
+
+4. SpecialAccount
+
+A classe SpecialAccount é uma extensão de DioAccount para contas especiais. Adiciona um bônus ao depósito.
+Métodos
+
+    constructor(name: string, accountNumber: number): Inicializa uma nova instância com nome e número da conta.
+    public deposit(amount: number): void: Adiciona um valor ao saldo com um bônus adicional de 10.
+
+Exemplo de Uso
+
+O arquivo app.ts mostra como criar instâncias das contas e usar os métodos disponíveis:
+
+typescript
+
+import { CompanyAccount } from './class/CompanyAccount';
+import { PeopleAccount } from './class/PeopleAccount';
+import { SpecialAccount } from "./class/SpecialAccount";
+
+const peopleAccount = new PeopleAccount(1, 'Bruna', 100);
+console.log('PeopleAccount:', peopleAccount);
+peopleAccount.deposit(100);
+console.log('PeopleAccount após depósito:', peopleAccount);
+
+const companyAccount = new CompanyAccount('DIO', 110);
+companyAccount.getLoan(10);  // Usa o método público getLoan para adicionar ao saldo
+console.log('CompanyAccount após empréstimo:', companyAccount);
+
+const specialAccount = new SpecialAccount('Special', 200);
+specialAccount.deposit(100);  // Deposita com bônus de 10
+console.log('SpecialAccount após depósito:', specialAccount);
+
+Considerações
+
+    Encapsulamento: Todos os atributos são privados para garantir encapsulamento e integridade dos dados.
+    Imutabilidade: O número da conta não pode ser alterado após a criação.
+    Extensibilidade: As classes podem ser estendidas para adicionar novas funcionalidades conforme necessário.
+
+Execução
+
+Para executar o projeto, use o seguinte comando:
+
+
+
+npm run dev
+
+Certifique-se de que o TypeScript e o ts-node-dev estão instalados.
+
+
+Conclusão:
+
+Esta documentação oferece uma visão geral completa das classes e métodos do projeto, além de exemplos de uso e instruções para execução. Se houver mais funcionalidades ou mudanças, a documentação deve ser atualizada para refletir as novas adições.
